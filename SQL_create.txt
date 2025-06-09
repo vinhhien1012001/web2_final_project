@@ -1,0 +1,86 @@
+CREATE TABLE users (
+	user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(100) NOT NULL,
+    email varchar(100) UNIQUE NOT NULL,
+    password varchar(255)
+);
+
+CREATE TABLE specialties (
+	specialty_id INT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(100) NOT NULL
+);
+
+CREATE TABLE doctors (
+  	doctor_id int AUTO_INCREMENT PRIMARY KEY,
+    name varchar(100) NOT NULL,
+    specialty_id int,
+    FOREIGN KEY (specialty_id) REFERENCES specialties(specialty_id)
+);
+
+CREATE TABLE patients (
+	patient_id int AUTO_INCREMENT PRIMARY KEY,
+    name varchar(100) NOT NULL,
+    birth_date DATE,
+    phone varchar(25)
+);
+
+CREATE TABLE appointments(
+  	appointment_id int AUTO_INCREMENT PRIMARY KEY,
+    doctor_id int NOT NULL,
+    patient_id int NOT NULL,
+    appointment_date datetime,
+    notes TEXT,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id),
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+);
+
+CREATE TABLE feedback (
+    feedback_id INT AUTO_INCREMENT PRIMARY KEY,
+    doctor_id INT NOT NULL,
+    patient_id INT NOT NULL,
+    rating TINYINT CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id),
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+);
+
+CREATE TABLE medications (
+    medication_id INT AUTO_INCREMENT PRIMARY KEY,
+    appointment_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    dosage VARCHAR(50),
+    FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id)
+);
+
+INSERT INTO specialties (name) VALUES 
+('Cardiology'),
+('Neurology'),
+('Dermatology'),
+('Pediatrics'), 
+('Orthopedics');
+
+
+INSERT INTO doctors (name, specialty_id) VALUES 
+('Dr. Alice Nguyen', 1),   -- Cardiology
+('Dr. Bob Tran', 2),       -- Neurology
+('Dr. Carol Le', 3),       -- Dermatology
+('Dr. David Pham', 1),
+('Dr. Emily Vo', 2),
+('Dr. Frank Do', 3),
+('Dr. Grace Huynh', 4),    -- Pediatrics
+('Dr. Henry Lam', 5),      -- Orthopedics
+('Dr. Ivy Ho', 4),
+('Dr. Jack Bui', 5);
+
+INSERT INTO patients (name, birth_date, phone) VALUES 
+('Anna Dang', '1995-01-15', '0901234561'),
+('Brian Vu', '1989-03-22', '0901234562'),
+('Cindy Ngo', '2000-07-30', '0901234563'),
+('Daniel Truong', '1992-11-12', '0901234564'),
+('Elena Phan', '1998-06-08', '0901234565'),
+('Felix Chau', '1990-12-01', '0901234566'),
+('Gina Ha', '2002-04-10', '0901234567'),
+('Howard Le', '1985-09-19', '0901234568'),
+('Isabelle Mai', '1993-02-25', '0901234569'),
+('Jason Nguyen', '1997-08-03', '0901234570');

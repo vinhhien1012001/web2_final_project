@@ -1,0 +1,178 @@
+body {
+  width: 100%;
+}
+
+.login {
+  width: 300px;
+  height: 100vh;
+  margin: 0 auto;
+  flex-direction: column;
+  display: flex;
+  gap: 16px;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(70, 148, 73);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.flex-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.mb-4 {
+  margin-bottom: 4px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+.login h2 {
+  align-self: center;
+}
+
+.login input {
+  width: 100%;
+  height: fit-content;
+  padding: 8px;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid gray;
+}
+
+.login button {
+  width: fit-content;
+  color: white;
+  background-color: rgb(70, 148, 73);
+  outline: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  align-self: center;
+}
+
+.register {
+  width: 600px;
+  height: 100vh;
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.register input {
+  width: 50%;
+  height: fit-content;
+  padding: 8px;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid gray;
+}
+
+.register button {
+  color: white;
+  background-color: rgb(70, 148, 73);
+  outline: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  color: white;
+  background-color: rgb(70, 148, 73);
+  outline: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  width: fit-content;
+}
+
+.secondary_button {
+  color: rgb(70, 148, 73);
+  background-color: white;
+  outline: none;
+  border: 1px solid rgb(70, 148, 73);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  width: fit-content;
+}
+
+.home_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 500px;
+}
+
+.home_table {
+  margin: 30px 0px;
+}
+
+.add_product {
+  width: 50vw;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.add_product form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add_product input {
+  width: 300px;
+}
+
+.add_product button {
+  align-self: center;
+}
+
+input {
+  height: fit-content;
+  padding: 8px;
+  border-radius: 10px;
+  outline: none;
+  border: 1px solid gray;
+}
+
+.action_button {
+  background-color: white;
+  border: none;
+  outline: none;
+  color: rgb(70, 148, 73);
+}
