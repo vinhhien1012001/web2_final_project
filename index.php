@@ -70,7 +70,7 @@ if (isset($_POST['delete'])) {
                 <a class="button" href="doctors.php">Manage Doctors</a>
                 <a class="button" href="appointments.php">Manage Appointments</a>
                 <a class="button" href="medications.php">Manage Medications</a>
-                <a class="button" href="feedback.php">Submit/View Feedback</a>
+                <a class="button" href="feedbacks.php">Submit/View Feedback</a>
                 <a class="button" href="chart.php">View Charts</a>
             </div>
         </div>
