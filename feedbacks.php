@@ -57,62 +57,11 @@ if (isset($_GET['delete'])) {
 <body>
     <?php include 'navbar.php'; ?>
     <div class="container my-4">
-        <h2>Feedback Management</h2>
-        
-        <!-- Add Feedback Form -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h4>Add New Feedback</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="doctor_id" class="form-label">Doctor</label>
-                        <select class="form-control" id="doctor_id" name="doctor_id" required>
-                            <option value="">Select Doctor</option>
-                            <?php
-                            $doctors = $conn->query("SELECT d.*, s.name as specialty_name 
-                                                   FROM doctors d 
-                                                   LEFT JOIN specialties s ON d.specialty_id = s.specialty_id");
-                            while ($doctor = $doctors->fetch_assoc()):
-                            ?>
-                                <option value="<?= $doctor['doctor_id'] ?>">
-                                    <?= htmlspecialchars($doctor['name']) ?> (<?= htmlspecialchars($doctor['specialty_name']) ?>)
-                                </option>
-                            <?php endwhile; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="patient_id" class="form-label">Patient</label>
-                        <select class="form-control" id="patient_id" name="patient_id" required>
-                            <option value="">Select Patient</option>
-                            <?php
-                            $patients = $conn->query("SELECT * FROM patients");
-                            while ($patient = $patients->fetch_assoc()):
-                            ?>
-                                <option value="<?= $patient['patient_id'] ?>">
-                                    <?= htmlspecialchars($patient['name']) ?>
-                                </option>
-                            <?php endwhile; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="rating" class="form-label">Rating</label>
-                        <select class="form-control" id="rating" name="rating" required>
-                            <option value="1">1 Star</option>
-                            <option value="2">2 Stars</option>
-                            <option value="3">3 Stars</option>
-                            <option value="4">4 Stars</option>
-                            <option value="5">5 Stars</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="comment" class="form-label">Comment</label>
-                        <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" name="add_feedback" class="btn btn-primary">Submit Feedback</button>
-                </form>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Feedback Management</h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFeedbackModal">
+                <i class="bi bi-plus-circle"></i> Add New Feedback
+            </button>
         </div>
 
         <!-- Feedback List -->
@@ -153,12 +102,12 @@ if (isset($_GET['delete'])) {
                                     <button type="button" class="btn btn-sm btn-primary" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#editModal<?= $feedback['feedback_id'] ?>">
-                                        Edit
+                                        <i class="bi bi-pencil"></i> Edit
                                     </button>
                                     <a href="?delete=<?= $feedback['feedback_id'] ?>" 
                                        class="btn btn-sm btn-danger"
                                        onclick="return confirm('Are you sure you want to delete this feedback?')">
-                                        Delete
+                                        <i class="bi bi-trash"></i> Delete
                                     </a>
                                 </td>
                             </tr>
@@ -216,7 +165,10 @@ if (isset($_GET['delete'])) {
                                                     <label for="edit_comment<?= $feedback['feedback_id'] ?>" class="form-label">Comment</label>
                                                     <textarea class="form-control" name="comment" rows="3" required><?= htmlspecialchars($feedback['comment']) ?></textarea>
                                                 </div>
-                                                <button type="submit" name="update_feedback" class="btn btn-primary">Update</button>
+                                                <div class="text-end">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" name="update_feedback" class="btn btn-primary">Update</button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -225,6 +177,70 @@ if (isset($_GET['delete'])) {
                         <?php endwhile; ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Feedback Modal -->
+    <div class="modal fade" id="addFeedbackModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="doctor_id" class="form-label">Doctor</label>
+                            <select class="form-control" id="doctor_id" name="doctor_id" required>
+                                <option value="">Select Doctor</option>
+                                <?php
+                                $doctors = $conn->query("SELECT d.*, s.name as specialty_name 
+                                                       FROM doctors d 
+                                                       LEFT JOIN specialties s ON d.specialty_id = s.specialty_id");
+                                while ($doctor = $doctors->fetch_assoc()):
+                                ?>
+                                    <option value="<?= $doctor['doctor_id'] ?>">
+                                        <?= htmlspecialchars($doctor['name']) ?> (<?= htmlspecialchars($doctor['specialty_name']) ?>)
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="patient_id" class="form-label">Patient</label>
+                            <select class="form-control" id="patient_id" name="patient_id" required>
+                                <option value="">Select Patient</option>
+                                <?php
+                                $patients = $conn->query("SELECT * FROM patients");
+                                while ($patient = $patients->fetch_assoc()):
+                                ?>
+                                    <option value="<?= $patient['patient_id'] ?>">
+                                        <?= htmlspecialchars($patient['name']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+                            <select class="form-control" id="rating" name="rating" required>
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Comment</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" name="add_feedback" class="btn btn-primary">Add Feedback</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
