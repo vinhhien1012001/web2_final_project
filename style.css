@@ -1,5 +1,14 @@
+* {
+  margin: 0 !important;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 .login {
@@ -28,6 +37,12 @@ button:hover {
 .flex-around {
   display: flex;
   justify-content: space-around;
+}
+
+.my-col-4 {
+  flex: 1;
+  min-width: 30%;
+
 }
 
 .mt-16 {
@@ -101,10 +116,18 @@ button:hover {
 }
 
 .home {
+  height: 100%;
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.dashboard_wrapper {
+  gap: 16px;
+  justify-content: center;
+  padding: 0 16px; 
 }
 
 .button {
@@ -176,3 +199,4 @@ input {
   outline: none;
   color: rgb(70, 148, 73);
 }
+

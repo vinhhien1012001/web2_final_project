@@ -1,6 +1,6 @@
 <?php
 require_once 'database.php';
-
+session_start();
 // Create (Add new doctor)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_doctor'])) {
     $name = $_POST['name'];
@@ -62,35 +62,18 @@ $specialties = $specialties_result->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctors Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <div class="container mt-4">
-        <h2>Doctors Management</h2>
-        
-        <!-- Add Doctor Form -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h4>Add New Doctor</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Doctor Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="specialty_id" class="form-label">Specialty</label>
-                        <select class="form-control" id="specialty_id" name="specialty_id" required>
-                            <?php foreach ($specialties as $specialty): ?>
-                                <option value="<?= $specialty['specialty_id'] ?>"><?= htmlspecialchars($specialty['name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <button type="submit" name="add_doctor" class="btn btn-primary">Add Doctor</button>
-                </form>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Doctors Management</h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDoctorModal">
+                <i class="bi bi-plus-circle"></i> Add New Doctor
+            </button>
         </div>
-
+        
         <!-- Doctors List -->
         <div class="card">
             <div class="card-header">
@@ -168,6 +151,38 @@ $specialties = $specialties_result->fetch_all(MYSQLI_ASSOC);
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Doctor Modal -->
+    <div class="modal fade" id="addDoctorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Doctor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Doctor Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="specialty_id" class="form-label">Specialty</label>
+                            <select class="form-control" id="specialty_id" name="specialty_id" required>
+                                <?php foreach ($specialties as $specialty): ?>
+                                    <option value="<?= $specialty['specialty_id'] ?>"><?= htmlspecialchars($specialty['name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" name="add_doctor" class="btn btn-primary">Add Doctor</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

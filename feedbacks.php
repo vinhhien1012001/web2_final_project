@@ -1,5 +1,6 @@
 <?php 
 include 'database.php';
+session_start();
 
 // Handle Add Feedback
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_feedback'])) {
@@ -51,9 +52,11 @@ if (isset($_GET['delete'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
-    <div class="container mt-4">
+    <?php include 'navbar.php'; ?>
+    <div class="container my-4">
         <h2>Feedback Management</h2>
         
         <!-- Add Feedback Form -->

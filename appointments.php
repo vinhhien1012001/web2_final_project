@@ -1,5 +1,6 @@
 <?php
 include 'database.php';
+session_start();
 
 // Handle Add Appointment
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_appointment'])) {
@@ -51,61 +52,18 @@ if (isset($_GET['delete'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointments Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <div class="container mt-4">
-        <h2>Appointments Management</h2>
-        
-        <!-- Add Appointment Form -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h4>Book New Appointment</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="doctor_id" class="form-label">Doctor</label>
-                        <select class="form-control" id="doctor_id" name="doctor_id" required>
-                            <option value="">Select Doctor</option>
-                            <?php
-                            $doctors = $conn->query("SELECT d.*, s.name as specialty_name 
-                                                   FROM doctors d 
-                                                   LEFT JOIN specialties s ON d.specialty_id = s.specialty_id");
-                            while ($doctor = $doctors->fetch_assoc()):
-                            ?>
-                                <option value="<?= $doctor['doctor_id'] ?>">
-                                    <?= htmlspecialchars($doctor['name']) ?> (<?= htmlspecialchars($doctor['specialty_name']) ?>)
-                                </option>
-                            <?php endwhile; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="patient_id" class="form-label">Patient</label>
-                        <select class="form-control" id="patient_id" name="patient_id" required>
-                            <option value="">Select Patient</option>
-                            <?php
-                            $patients = $conn->query("SELECT * FROM patients");
-                            while ($patient = $patients->fetch_assoc()):
-                            ?>
-                                <option value="<?= $patient['patient_id'] ?>">
-                                    <?= htmlspecialchars($patient['name']) ?>
-                                </option>
-                            <?php endwhile; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="appointment_date" class="form-label">Appointment Date & Time</label>
-                        <input type="datetime-local" class="form-control" id="appointment_date" name="appointment_date" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="notes" class="form-label">Notes</label>
-                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
-                    </div>
-                    <button type="submit" name="add_appointment" class="btn btn-primary">Book Appointment</button>
-                </form>
-            </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Appointments Management</h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAppointmentModal">
+                <i class="bi bi-plus-circle"></i> Add New Appointment
+            </button>
         </div>
-
+        
         <!-- Appointments List -->
         <div class="card">
             <div class="card-header">
@@ -211,6 +169,62 @@ if (isset($_GET['delete'])) {
                         <?php endwhile; ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+  
+
+    <div class="modal fade" id="addAppointmentModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="doctor_id" class="form-label">Doctor</label>
+                        <select class="form-control" id="doctor_id" name="doctor_id" required>
+                            <option value="">Select Doctor</option>
+                            <?php
+                            $doctors = $conn->query("SELECT d.*, s.name as specialty_name 
+                                                   FROM doctors d 
+                                                   LEFT JOIN specialties s ON d.specialty_id = s.specialty_id");
+                            while ($doctor = $doctors->fetch_assoc()):
+                            ?>
+                                <option value="<?= $doctor['doctor_id'] ?>">
+                                    <?= htmlspecialchars($doctor['name']) ?> (<?= htmlspecialchars($doctor['specialty_name']) ?>)
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="patient_id" class="form-label">Patient</label>
+                        <select class="form-control" id="patient_id" name="patient_id" required>
+                            <option value="">Select Patient</option>
+                            <?php
+                            $patients = $conn->query("SELECT * FROM patients");
+                            while ($patient = $patients->fetch_assoc()):
+                            ?>
+                                <option value="<?= $patient['patient_id'] ?>">
+                                    <?= htmlspecialchars($patient['name']) ?>
+                                </option>
+                            <?php endwhile; ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="appointment_date" class="form-label">Appointment Date & Time</label>
+                        <input type="datetime-local" class="form-control" id="appointment_date" name="appointment_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                    <button type="submit" name="add_appointment" class="btn btn-primary">Book Appointment</button>
+                </form>
+            </div>
             </div>
         </div>
     </div>

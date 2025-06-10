@@ -1,5 +1,6 @@
 <?php 
 include 'database.php';
+session_start();
 
 // Handle Add Medication
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_medication'])) {
@@ -58,6 +59,7 @@ if (isset($_GET['delete'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Medications Management</h2>
