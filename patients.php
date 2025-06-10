@@ -5,31 +5,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PATIENTS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Patients Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <h2>Add patient</h2>
-        <form method="POST">
-            Name: <input type="text" name="name">
-            Birth Date: <input type="date" name="birth_date">
-            Phone: <input type="text" name="phone">
-            <input type="submit" name="submit" value="add patient">
-        </form>
+    <div class="container mt-4">
+        <h2>Patients Management</h2>
+        
+        <!-- Add Patient Form -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Add New Patient</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="birth_date" class="form-label">Birth Date</label>
+                        <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <button type="submit" name="add_patient" class="btn btn-primary">Add Patient</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Patients List -->
+        <div class="card">
+            <div class="card-header">
+                <h4>Patients List</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Birth Date</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $result = $conn->query("SELECT * FROM patients");
+                        while ($patient = $result->fetch_assoc()):
+                        ?>
+                            <tr>
+                                <td><?= $patient['patient_id'] ?></td>
+                                <td><?= htmlspecialchars($patient['name']) ?></td>
+                                <td><?= $patient['birth_date'] ?></td>
+                                <td><?= htmlspecialchars($patient['phone']) ?></td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editModal<?= $patient['patient_id'] ?>">
+                                        Edit
+                                    </button>
+                                    <a href="?delete=<?= $patient['patient_id'] ?>" 
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Are you sure you want to delete this patient?')">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editModal<?= $patient['patient_id'] ?>" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edit Patient</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="POST">
+                                                <input type="hidden" name="patient_id" value="<?= $patient['patient_id'] ?>">
+                                                <div class="mb-3">
+                                                    <label for="edit_name<?= $patient['patient_id'] ?>" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" 
+                                                           id="edit_name<?= $patient['patient_id'] ?>" 
+                                                           name="name" 
+                                                           value="<?= htmlspecialchars($patient['name']) ?>" 
+                                                           required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_birth_date<?= $patient['patient_id'] ?>" class="form-label">Birth Date</label>
+                                                    <input type="date" class="form-control" 
+                                                           id="edit_birth_date<?= $patient['patient_id'] ?>" 
+                                                           name="birth_date" 
+                                                           value="<?= $patient['birth_date'] ?>" 
+                                                           required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="edit_phone<?= $patient['patient_id'] ?>" class="form-label">Phone</label>
+                                                    <input type="text" class="form-control" 
+                                                           id="edit_phone<?= $patient['patient_id'] ?>" 
+                                                           name="phone" 
+                                                           value="<?= htmlspecialchars($patient['phone']) ?>" 
+                                                           required>
+                                                </div>
+                                                <button type="submit" name="update_patient" class="btn btn-primary">Update</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <?php
-    if (isset($_POST['submit'])) {
-        $name = $_POST['name'];
-        $birth_date = $_POST['birth_date'];
-        $phone = $_POST['phone'];
-        $conn->query("INSERT INTO patients (name, birth_date, phone) VALUES ('$name','$birth_date','$phone') ");
-
-        echo "PATIENT ADDED!";
-    }
-    ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+
+<?php
+// Handle Add Patient
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_patient'])) {
+    $name = $_POST['name'];
+    $birth_date = $_POST['birth_date'];
+    $phone = $_POST['phone'];
+    
+    $stmt = $conn->prepare("INSERT INTO patients (name, birth_date, phone) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $name, $birth_date, $phone);
+    $stmt->execute();
+    
+    header("Location: patients.php");
+    exit();
+}
+
+// Handle Update Patient
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_patient'])) {
+    $patient_id = $_POST['patient_id'];
+    $name = $_POST['name'];
+    $birth_date = $_POST['birth_date'];
+    $phone = $_POST['phone'];
+    
+    $stmt = $conn->prepare("UPDATE patients SET name = ?, birth_date = ?, phone = ? WHERE patient_id = ?");
+    $stmt->bind_param("sssi", $name, $birth_date, $phone, $patient_id);
+    $stmt->execute();
+    
+    header("Location: patients.php");
+    exit();
+}
+
+// Handle Delete Patient
+if (isset($_GET['delete'])) {
+    $patient_id = $_GET['delete'];
+    
+    $stmt = $conn->prepare("DELETE FROM patients WHERE patient_id = ?");
+    $stmt->bind_param("i", $patient_id);
+    $stmt->execute();
+    
+    header("Location: patients.php");
+    exit();
+}
+?>
